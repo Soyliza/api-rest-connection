@@ -1,27 +1,31 @@
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { createItem } from "../services/api";
 
 // Esta pantalla permite capturar un nuevo elemento para agregarlo al listado.
-export default function AddItemScreen({ navigation, onAddItem }) {
+export default function AddItemScreen({ navigation }) {
 
   // Aquí guardo el título y la descripción que escribe el usuario.
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   // Verifico que los campos no estén vacíos antes de guardar la información.
-  function handleSave() {
-    if (title.trim() === '' || description.trim() === '') {
-      return;
-    }
+  async function handleSave() {
+  if (title.trim() === '' || description.trim() === '') {
+    return;
+  }
 
-    onAddItem({
-      title: title,
-      description: description,
+  try {
+    await createItem({
+      title,
+      description,
     });
 
-    // Después de guardar regreso al listado.
-    navigation.navigate('Items');
+    navigation.navigate("Items");
+  } catch (error) {
+    console.log(error);
   }
+}
 
   return (
     <View style={styles.container}>

@@ -32,9 +32,13 @@ export default function ItemScreen({ navigation }){
     }
   }
    
-  useEffect(()=>{
+  useEffect(() => {
+  const unsubscribe = navigation.addListener('focus', () => {
     loadItems();
-  } ,[]);
+  });
+
+  return unsubscribe;
+}, [navigation]);
 
 
   if(loading){
